@@ -15,7 +15,7 @@ const Payment = () => {
 
   const stripe = useStripe();
   const elements = useElements();
-  
+
   const [error, setError] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [succeeded, setSucceeded] = useState(false);
@@ -46,6 +46,9 @@ getClientSecret()
         setError(null);
         setProcessing(false)
 
+        dispatch({
+            type:"EMPTY_BASKET",
+        })
         history.replace('/orders')
     })
   };
