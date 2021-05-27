@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../CSS/Payment.css";
 import { useStateValue } from "../StateProvider";
 import CheckoutProduct from "./CheckoutProduct";
@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import CurrencyFormat from "react-currency-format";
 import axios from '../async/Axios'
-import {useHistory} from 'react-router-dom'
-
+import { useHistory } from 'react-router-dom'
+import {db} from '../firebase'
 const Payment = () => {
-    const history = useHistory()
+  const history = useHistory()
 
   const [{ basket, user, value }, dispatch] = useStateValue();
 
@@ -22,34 +22,45 @@ const Payment = () => {
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState(true);
 
-  useEffect(()=>{
-const getClientSecret = async ()=>{
-    const response =await axios({
-        method:'post',
-        url:`/payments/create?total=${value * 100}`
-    })
-    setClientSecret(response.data.clientSecret)
-}
-getClientSecret()
-  },[basket])
-  
+  useEffect(() => {
+    const getClientSecret = async () => {
+      const response = await axios({
+        method: 'post',
+        url: `/payments/create?total=${value * 100}`
+      })
+      setClientSecret(response.data.clientSecret)
+    }
+    getClientSecret()
+  }, [basket])
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setProcessing(true);
     const payload = await stripe.confirmCardPayment(clientSecret, {
-        payment_method:{
-            card:elements.getElement(CardElement)
-        }
-    }).then(({paymentIntent})=>{
-        //paymentIntent= payment confirmation
-        setSucceeded(true)
-        setError(null);
-        setProcessing(false)
+      payment_method: {
+        card: elements.getElement(CardElement)
+      }
+    }).then(({ paymentIntent }) => {
+      //paymentIntent= payment confirmation
 
-        dispatch({
-            type:"EMPTY_BASKET",
+      db.collection('users')
+        .doc(user?.id)
+        .collection('orders')
+        .doc(paymentIntent.id)
+        .set({
+          basket: basket,
+          amount: paymentIntent.amount,
+          created: paymentIntent.created
         })
-        history.replace('/orders')
+
+      setSucceeded(true)
+      setError(null);
+      setProcessing(false)
+
+      dispatch({
+        type: "EMPTY_BASKET",
+      })
+      history.replace('/orders')
     })
   };
 
@@ -116,10 +127,10 @@ getClientSecret()
                   prefix={"$"}
                 />
                 <button disabled={processing || disabled || succeeded}>
-                    <span>
-                        {processing ? <p>Processing</p> : "Buy Now"
-                        }
-                    </span>
+                  <span>
+                    {processing ? <p>Processing</p> : "Buy Now"
+                    }
+                  </span>
                 </button>
               </div>
               {error && <div>{error}</div>}
