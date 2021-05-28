@@ -7,7 +7,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import CurrencyFormat from "react-currency-format";
 import axios from '../async/Axios'
 import { useHistory } from 'react-router-dom'
-import {db} from '../firebase'
+import { db } from '../firebase'
 const Payment = () => {
   const history = useHistory()
 
@@ -44,7 +44,7 @@ const Payment = () => {
       //paymentIntent= payment confirmation
 
       db.collection('users')
-        .doc(user?.id)
+        .doc(user?.uid)
         .collection('orders')
         .doc(paymentIntent.id)
         .set({
