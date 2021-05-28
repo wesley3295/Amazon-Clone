@@ -14,7 +14,7 @@ const Home = () => {
                     <Product id={3} title="Liquid I.V. Hydration Multiplier - Passion Fruit - Hydration Powder Packets" image="https://images-na.ssl-images-amazon.com/images/I/715U91nwgFL._AC_SL1500_.jpg" price="58.99" rating={3} />
                     <Product id={4} title="AMD Ryzen 9 5900X 12-core, 24-Thread Unlocked Desktop Processor" image="https://images-na.ssl-images-amazon.com/images/I/616VM20%2BAzL._AC_SL1384_.jpg" price="687.99" rating={3} />
                     <Product id={5} title="
-ASUS ROG STRIX NVIDIA GeForce RTX 3090 Gaming Graphics Card- PCIe 4.0"  image="https://images-na.ssl-images-amazon.com/images/I/91XyrUFYKfL._AC_SL1500_.jpg" price="3,999.99" rating={3} />
+ASUS ROG STRIX NVIDIA GeForce RTX 3090 Gaming Graphics Card- PCIe 4.0"  image="https://images-na.ssl-images-amazon.com/images/I/91XyrUFYKfL._AC_SL1500_.jpg" price="3999.99" rating={3} />
 
                 </div>
                 <div className="home__row">
